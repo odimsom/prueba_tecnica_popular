@@ -1,0 +1,239 @@
+/* Responsive styles for small mobile (max-width: 480px) */
+@media (max-width: 480px) {
+    .loading-text {
+        font-size: 48px;
+    }
+    
+    .loading-progress-content {
+        width: 90%;
+        height: 50px;
+    }
+    
+    .select-mode-title {
+        font-size: 32px;
+        padding: 0 20px;
+    }
+    
+    .single-player-btn,
+    .multi-player-btn {
+        width: 90%;
+        max-width: 300px;
+        height: auto;
+        min-height: 55px;
+        font-size: 18px;
+        padding: 12px 15px;
+        line-height: 1.3;
+        white-space: normal;
+    }
+    
+    .form-name-request-title {
+        font-size: 26px;
+        padding: 0 20px;
+    }
+    
+    #nameForm {
+        width: 90%;
+        max-width: 300px;
+    }
+    
+    #nameForm input[type="text"],
+    .form-name-request-btn {
+        height: 55px;
+        font-size: 18px;
+        padding: 0 20px;
+    }
+    
+    .game-container {
+        padding: 10px 15px;
+        gap: 15px;
+    }
+    
+    .back-btn,
+    .restart-btn {
+        width: 50px;
+        height: 50px;
+        top: 10px;
+    }
+    
+    .back-btn {
+        left: 15px;
+    }
+    
+    .restart-btn {
+        right: 15px;
+    }
+    
+    .back-btn img,
+    .restart-btn img {
+        width: 25px;
+        height: 25px;
+    }
+    
+    .players-section {
+        gap: 20px;
+        margin-top: 50px;
+        margin-bottom: 15px;
+    }
+    
+    .player-avatar {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .player-avatar span {
+        font-size: 24px;
+    }
+    
+    .player-mark {
+        width: 30px;
+        height: 30px;
+        bottom: -5px;
+        right: -5px;
+    }
+    
+    .player-name {
+        font-size: 14px;
+    }
+    
+    .vs-container {
+        font-size: 24px;
+        height: 60px;
+    }
+    
+    .game-actions-panel {
+        padding: 10px;
+        gap: 8px;
+    }
+    
+    .action-btn,
+    .switch-symbols-btn {
+        width: 45px;
+        height: 45px;
+        font-size: 24px;
+    }
+    
+    .action-btn img {
+        width: 22px;
+        height: 22px;
+    }
+    
+    .game-board-container {
+        padding: 15px 20px 30px 20px;
+    }
+    
+    .scoreboard {
+        grid-template-columns: repeat(3, 85px);
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+    
+    .score-initial {
+        font-size: 18px;
+    }
+    
+    .score-wins {
+        font-size: 11px;
+    }
+    
+    .score-ties img {
+        width: 22px;
+        height: 22px;
+    }
+    
+    .game-board {
+        grid-template-columns: repeat(3, 85px);
+        grid-template-rows: repeat(3, 85px);
+        gap: 10px;
+    }
+    
+    .modal-square {
+        max-width: 320px;
+        min-height: 380px;
+        padding: 30px 20px 20px 20px;
+    }
+    
+    .modal-history {
+        width: 95%;
+        max-width: 340px;
+        max-height: 500px;
+        padding: 25px 20px;
+    }
+    
+    .modal-history-container {
+        max-height: 250px;
+    }
+    
+    .history-game-item {
+        padding: 10px;
+    }
+    
+    .history-game-icon {
+        font-size: 24px;
+    }
+    
+    .history-game-vs {
+        font-size: 13px;
+    }
+    
+    .history-game-result {
+        font-size: 12px;
+    }
+    
+    .history-game-date {
+        font-size: 10px;
+    }
+    
+    .modal-icon {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 10px;
+    }
+    
+    .modal-icon-defeat {
+        width: 150px;
+    }
+    
+    .modal-title {
+        font-size: 22px;
+        margin: 5px 0;
+    }
+    
+    .modal-subtitle {
+        font-size: 22px;
+        margin: 0 0 15px 0;
+    }
+    
+    .modal-scoreboard {
+        gap: 15px;
+        margin: 10px 0;
+    }
+    
+    .modal-score-initial {
+        font-size: 16px;
+    }
+    
+    .modal-score-item span {
+        font-size: 12px;
+    }
+    
+    .modal-ties-icon {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .modal-buttons {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+    }
+    
+    .modal-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+        width: 100%;
+    }
+    
+    .modal-btn-equal {
+        min-width: 100%;
+    }
+}

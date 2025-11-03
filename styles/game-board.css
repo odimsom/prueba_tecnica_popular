@@ -1,0 +1,185 @@
+/* Game board and controls */
+.game-board-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    flex: 1;
+    margin-top: 0;
+    padding-bottom: 50px;
+    gap: 30px;
+}
+
+.game-actions-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background: rgba(10, 25, 60, 0.6);
+    border-radius: 15px;
+    align-self: flex-start;
+}
+
+.action-btn {
+    width: 60px;
+    height: 60px;
+    background: #EE9200 0% 0% no-repeat padding-box;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    font-size: 28px;
+    color: #FFFFFF;
+    font-weight: bold;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.action-btn img {
+    width: 32px;
+    height: 32px;
+    filter: brightness(0) invert(1);
+}
+
+.action-btn:hover {
+    background: #d68200;
+    box-shadow: 0 0 20px rgba(238, 146, 0, 0.6);
+}
+
+.action-btn.active {
+    background: #2AB4FD 0% 0% no-repeat padding-box;
+}
+
+.action-btn.active:hover {
+    background: #28a8d6;
+    box-shadow: 0 0 20px rgba(49, 195, 245, 0.6);
+}
+
+.action-btn.inactive {
+    background: #505050 0% 0% no-repeat padding-box;
+    opacity: 0.7;
+}
+
+.action-btn.inactive:hover {
+    background: #606060;
+    box-shadow: 0 0 20px rgba(80, 80, 80, 0.6);
+}
+
+.switch-symbols-btn {
+    width: 60px;
+    height: 60px;
+    background: #EE9200 0% 0% no-repeat padding-box;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    font-size: 32px;
+    color: #FFFFFF;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.switch-symbols-btn:hover {
+    background: #d68200;
+    box-shadow: 0 0 20px rgba(238, 146, 0, 0.6);
+    transform: rotate(180deg);
+}
+
+.game-board-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    background: rgba(10, 25, 60, 0.8);
+    padding: 30px 35px 50px 35px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.scoreboard {
+    display: grid;
+    grid-template-columns: repeat(3, 140px);
+    gap: 18px;
+    margin-bottom: 20px;
+}
+
+.score-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.score-initial {
+    font: normal normal bold 28px/37px Roboto;
+    color: #FFFFFF;
+    text-align: center;
+}
+
+.score-ties {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score-ties img {
+    width: 35px;
+    height: 35px;
+    margin-bottom: 4px;
+}
+
+.score-wins {
+    font: normal normal bold 16px/21px Roboto;
+    color: #FFFFFF;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.game-board {
+    display: grid;
+    grid-template-columns: repeat(3, 140px);
+    grid-template-rows: repeat(3, 140px);
+    gap: 18px;
+}
+
+.game-cell {
+    background: #FFFFFF;
+    border-radius: 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.game-cell:hover:not(.disabled) {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.game-cell img {
+    width: 65%;
+    height: 65%;
+    object-fit: contain;
+}
+
+.game-cell.disabled {
+    cursor: not-allowed;
+}
+
+.game-cell.winner {
+    background: #31C3F5;
+    animation: winPulse 0.6s ease;
+}
+
+@keyframes winPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+}

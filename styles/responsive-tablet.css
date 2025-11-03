@@ -1,0 +1,72 @@
+/* Responsive styles for tablets (768px - 1024px) */
+@media (max-width: 1024px) {
+    body {
+        background-image: url("/assets/backgrounds/Backtablet.png");
+    }
+    
+    .loading-text {
+        font-size: 100px;
+    }
+    
+    .loading-progress-content {
+        width: 600px;
+    }
+    
+    .select-mode-title {
+        font-size: 60px;
+    }
+    
+    .single-player-btn,
+    .multi-player-btn,
+    #nameForm input[type="text"],
+    .form-name-request-btn {
+        width: 500px;
+        height: 75px;
+        font-size: 32px;
+    }
+    
+    .game-container {
+        padding: 20px 50px;
+    }
+    
+    .back-btn,
+    .restart-btn {
+        width: 70px;
+        height: 70px;
+    }
+    
+    .back-btn {
+        left: 50px;
+    }
+    
+    .restart-btn {
+        right: 50px;
+    }
+    
+    .modal-square {
+        width: 500px;
+        height: 500px;
+    }
+    
+    .modal-defeat {
+        width: 600px;
+        height: 600px;
+    }
+    
+    .modal-icon {
+        width: 180px;
+        height: 180px;
+    }
+    
+    .modal-icon-defeat {
+        width: 250px;
+    }
+    
+    .modal-title {
+        font-size: 38px;
+    }
+    
+    .modal-subtitle {
+        font-size: 38px;
+    }
+}

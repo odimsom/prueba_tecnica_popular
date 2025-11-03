@@ -1,0 +1,62 @@
+/* Base styles and CSS reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/assets/fonts/Roboto-Regular.ttf') format('woff2');
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('/assets/fonts/Roboto-Bold.ttf') format('woff2');
+  font-weight: 700;
+}
+
+body {
+  background-image: url("/assets/backgrounds/Back.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
+  background-color: #000;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, 
+      rgba(0, 0, 0, 0.6) 0%, 
+      rgba(0, 0, 0, 0) 30%, 
+      rgba(0, 0, 0, 0) 70%, 
+      rgba(0, 0, 0, 0.6) 100%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+body.loading {
+  overflow: hidden;
+}
+
+body.loading > *:not(.loading-container) {
+  display: none;
+}
+
+.screen {
+    opacity: 0;
+    transition: opacity 0.4s ease-in-out;
+}
+
+.screen.active {
+    opacity: 1;
+}

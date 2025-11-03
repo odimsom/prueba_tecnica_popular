@@ -1,0 +1,51 @@
+/* Loading screen styles */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: white;
+    gap: 80px;
+}
+
+.loading-text {
+    text-align: center;
+    font: normal normal bold 151px/199px Roboto;
+    letter-spacing: 0px;
+    color: #FFFFFF;
+    opacity: 1; 
+}
+
+.loading-progress-content {
+    width: 797px;
+    height: 86px;
+    border: 4px solid #FFFFFF;
+    opacity: 1;
+    position: relative;
+    background: linear-gradient(90deg, 
+        rgba(238, 146, 0, 0.15) 0%, 
+        rgba(238, 146, 0, 0.05) 50%, 
+        rgba(238, 146, 0, 0) 100%);
+    box-shadow: inset 0 0 30px rgba(238, 146, 0, 0.2);
+}
+
+.loading-progress {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 0;
+    height: calc(100% - 8px);
+    background: #EE9200 0% 0% no-repeat padding-box;
+    opacity: 1;
+    animation: loadingAnimation 2s linear forwards;
+    box-shadow: 
+        inset 0 0 20px rgba(255, 255, 255, 0.4),
+        inset 0 -10px 30px rgba(255, 165, 0, 0.6),
+        0 0 15px rgba(238, 146, 0, 0.5);
+}
+
+@keyframes loadingAnimation {
+    0% { width: 0; }
+    100% { width: calc(100% - 8px); }
+}

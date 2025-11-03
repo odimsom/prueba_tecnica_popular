@@ -1,0 +1,50 @@
+/* Mode selection screen styles */
+.select-mode-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+    height: 100vh;
+}
+
+.select-mode-title {
+    font: normal normal bold 80px/100px Roboto;
+    color: #FFFFFF;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.mode-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.single-player-btn,
+.multi-player-btn {
+    width: 632px;
+    height: 86px;
+    background: #2AB4FD 0% 0% no-repeat padding-box;
+    border: none;
+    border-radius: 10px;
+    font: normal normal bold 40px/53px Roboto;
+    color: #FFFFFF;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.multi-player-btn {
+    background: #EE9200 0% 0% no-repeat padding-box;
+}
+
+.single-player-btn:hover {
+    background: #28a8d6;
+    box-shadow: 0 0 20px rgba(49, 195, 245, 0.6);
+}
+
+.multi-player-btn:hover {
+    background: #d68200;
+    box-shadow: 0 0 20px rgba(238, 146, 0, 0.6);
+}
