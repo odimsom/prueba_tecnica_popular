@@ -256,9 +256,21 @@ function createGameScreen(gameData) {
     }
 
     function updateScoreboard() {
+        const prevScore1 = parseInt(score1Wins.textContent) || 0;
+        const prevScore2 = parseInt(score2Wins.textContent) || 0;
+        
         score1Wins.textContent = `${game.scores.player1} GANADAS`;
         score2Wins.textContent = `${game.scores.player2} GANADAS`;
         tiesCount.textContent = `${game.scores.ties} EMPATES`;
+        
+        if (game.scores.player1 > prevScore1) {
+            score1.classList.add('score-update');
+            setTimeout(() => score1.classList.remove('score-update'), 500);
+        }
+        if (game.scores.player2 > prevScore2) {
+            score2.classList.add('score-update');
+            setTimeout(() => score2.classList.remove('score-update'), 500);
+        }
     }
 
     function updatePlayerSymbols() {
@@ -291,6 +303,7 @@ function createGameScreen(gameData) {
                         game.resetBoard();
                         updateBoard();
                         updateScoreboard();
+                        effectsManager.clearAllEffects();
                     }, () => {
                         screen.remove();
                         const selectModeScreen = createSelectModeScreen((mode) => {
@@ -303,6 +316,12 @@ function createGameScreen(gameData) {
                 } else {
                     const winnerName = winner === 'X' ? game.player1 : (game.mode === 'cpu' ? 'CPU' : game.player2);
                     const isPlayer1Winner = winner === 'X';
+                    
+                    if (isPlayer1Winner) {
+                        effectsManager.onGameWin(winnerName, false);
+                    } else {
+                        effectsManager.onGameLoss();
+                    }
                     
                     showWinnerModal(game, winnerName, isPlayer1Winner, () => {
                         game.resetBoard();
