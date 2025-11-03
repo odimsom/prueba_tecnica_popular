@@ -1,10 +1,10 @@
-# 🎮 Tic Tac Toe - Prueba Técnica
+# Tic Tac Toe - Prueba Técnica
 
 Juego interactivo de Tic Tac Toe (Tres en Raya) desarrollado con tecnologías web vanilla, siguiendo las especificaciones de diseño de Adobe XD.
 
 ## Características
 
-### ✨ Funcionalidades Principales
+### Funcionalidades Principales
 - **Dos modos de juego:**
   - Persona vs Persona (multijugador local)
   - Persona vs CPU (con inteligencia artificial)
@@ -12,6 +12,7 @@ Juego interactivo de Tic Tac Toe (Tres en Raya) desarrollado con tecnologías we
 - **Detección de victorias** en todas direcciones (horizontal, vertical, diagonal)
 - **Manejo de empates**
 - **Historial de partidas** por jugador
+- **Guardado automático de partidas incompletas**
 - **Diseño responsive** para Desktop, Tablet y Mobile
 
 ### Características Adicionales
@@ -33,8 +34,20 @@ Juego interactivo de Tic Tac Toe (Tres en Raya) desarrollado con tecnologías we
 ```
 prueba_tecnica_popular/
 ├── index.html
+├── README.md
 ├── styles/
-│   └── style.css
+│   ├── base.css
+│   ├── loading.css
+│   ├── mode-selection.css
+│   ├── name-form.css
+│   ├── game-screen.css
+│   ├── game-board.css
+│   ├── modals.css
+│   ├── history-modal.css
+│   ├── audio-modal.css
+│   ├── responsive-tablet.css
+│   ├── responsive-mobile.css
+│   └── responsive-small.css
 ├── scripts/
 │   ├── index.js
 │   ├── game/
@@ -48,13 +61,38 @@ prueba_tecnica_popular/
 │       ├── screenManager.js
 │       ├── modalManager.js
 │       ├── historyManager.js
+│       ├── storageManager.js
 │       ├── audioManager.js
 │       └── animationManager.js
 └── assets/
     ├── backgrounds/
+    │   ├── Back.png
+    │   ├── Backtablet.png
+    │   ├── Backiphone.png
+    │   └── modals/
     ├── fonts/
+    │   └── Roboto/
     ├── game_icons/
+    │   ├── back_icon.svg
+    │   ├── rollback_icon.svg
+    │   ├── music_icon.png
+    │   ├── sound_icon.png
+    │   ├── history_icon.png
+    │   ├── player_icon_x.svg
+    │   ├── player_icon_o.svg
+    │   ├── move_icon_x.svg
+    │   ├── move_icon_o.svg
+    │   ├── tie_icon.svg
+    │   └── modals/
+    ├── icons/
+    │   └── favicon.ico
     └── song/
+        ├── background.mp3
+        ├── start.mp3
+        ├── place.wav
+        ├── win.wav
+        ├── draw.wav
+        └── click.wav
 ```
 
 ## Instrucciones de Uso
@@ -161,30 +199,31 @@ Diseño basado en las especificaciones de Adobe XD:
 ## Testing
 
 El juego ha sido probado en:
-- ✅ Chrome (última versión)
-- ✅ Firefox (última versión)
-- ✅ Safari (última versión)
-- ✅ Edge (última versión)
+- Chrome (última versión)
+- Firefox (última versión)
+- Safari (última versión)
+- Edge (última versión)
 
 ## Requisitos Cumplidos
 
-- ✅ HTML, CSS y JavaScript puro (sin frameworks)
-- ✅ Diseño responsive
-- ✅ Selección de contrincante (Persona/CPU)
-- ✅ Sistema de puntuación
-- ✅ Detección de victorias y empates
-- ✅ Persistencia de datos
-- ✅ Diseño según Adobe XD
-- ⭐ Bonus: Rotación de jugadores
-- ⭐ Bonus: Animaciones
-- ⭐ Bonus: Efectos de sonido
-- ⭐ Bonus: Historial de partidas
+- HTML, CSS y JavaScript puro (sin frameworks)
+- Diseño responsive
+- Selección de contrincante (Persona/CPU)
+- Sistema de puntuación
+- Detección de victorias y empates
+- Persistencia de datos
+- Diseño según Adobe XD
+- Bonus: Rotación de jugadores
+- Bonus: Animaciones
+- Bonus: Efectos de sonido
+- Bonus: Historial de partidas
+- Bonus: Guardado automático de partidas
 
 ## Autor
 
 Desarrollado por Francisco Daniel Castro Borrome como prueba técnica para demostrar habilidades en desarrollo web frontend con JavaScript vanilla.
 
-## 📄 Licencia
+## Licencia
 
 Este proyecto fue desarrollado como prueba técnica. Todos los derechos reservados.
 
