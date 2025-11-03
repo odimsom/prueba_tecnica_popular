@@ -279,6 +279,9 @@ function createGameScreen(gameData) {
         const result = game.makeMove(index);
         updateBoard();
         updateScoreboard();
+        
+        // 💾 Guardado automático del estado del juego
+        saveGameState();
 
         const winner = game.checkWinner();
         if (winner) {
@@ -338,6 +341,12 @@ function createGameScreen(gameData) {
                     scores: scores
                 });
                 
+                // Limpiar partida guardada al completar
+                clearSavedGame();
+                
+                // Actualizar estadísticas después de guardar el match
+                setTimeout(() => updateStats(), 100);
+                
                 if (game.mode === 'cpu') {
                     if (isPlayer1Winner) {
                         modalManager.showVictoryModal(result.winner, game.player1, game.player2, true, scores, nextRound, exitGame);
@@ -368,6 +377,12 @@ function createGameScreen(gameData) {
                     }
                 });
                 
+                // Limpiar partida guardada al completar
+                clearSavedGame();
+                
+                // Actualizar estadísticas después de guardar el match
+                setTimeout(() => updateStats(), 100);
+                
                 showDrawModal(game, () => {
                     game.resetBoard();
                     updateBoard();
@@ -391,6 +406,9 @@ function createGameScreen(gameData) {
                 const aiResult = game.makeMove(aiMove);
                 updateBoard();
                 updateScoreboard();
+                
+                // Guardar después del movimiento de la IA
+                saveGameState();
 
                 if (aiResult && aiResult.type === 'win') {
                     setTimeout(() => {
@@ -411,6 +429,12 @@ function createGameScreen(gameData) {
                             scores: scores
                         });
                         
+                        // Limpiar partida guardada al completar
+                        clearSavedGame();
+                        
+                        // Actualizar estadísticas después de guardar el match
+                        setTimeout(() => updateStats(), 100);
+                        
                         modalManager.showDefeatModal(loserName, aiResult.winner, game.player1, game.player2, true, scores, nextRound, exitGame);
                     }, 500);
                 } else if (aiResult && aiResult.type === 'tie') {
@@ -428,6 +452,12 @@ function createGameScreen(gameData) {
                                 ties: game.scores.ties
                             }
                         });
+                        
+                        // Limpiar partida guardada al completar
+                        clearSavedGame();
+                        
+                        // Actualizar estadísticas después de guardar el match
+                        setTimeout(() => updateStats(), 100);
                         
                         showDrawModal(game, () => {
                             game.resetBoard();
@@ -474,12 +504,150 @@ function createGameScreen(gameData) {
             }, 500);
         }
     }
+    
+    // 💾 Sistema de guardado automático
+    function saveGameState() {
+        if (game.gameOver) return;
+        
+        const gameId = gameData.gameId || `game_${game.player1}_${Date.now()}`;
+        const gameState = {
+            id: gameId,
+            player1: game.player1,
+            player2: game.player2,
+            mode: game.mode,
+            board: [...game.board],
+            currentPlayer: game.currentPlayer,
+            scores: { ...game.scores },
+            player1Symbol: game.player1Symbol,
+            player2Symbol: game.player2Symbol
+        };
+        
+        historyManager.saveInProgressGame(game.player1, gameState);
+    }
+    
+    // 🗑️ Limpiar partida guardada
+    function clearSavedGame() {
+        historyManager.clearInProgressGame(game.player1);
+    }
+    
+    // � Cargar y actualizar estadísticas desde historial
+    function updateStats() {
+        const player1History = historyManager.getPlayerHistory(game.player1);
+        const player2History = historyManager.getPlayerHistory(game.player2);
+        
+        // Contar victorias del jugador 1
+        let player1Wins = 0;
+        let player2Wins = 0;
+        let totalTies = 0;
+        
+        player1History.forEach(match => {
+            if (match.winner === game.player1) player1Wins++;
+            else if (match.winner === 'tie') totalTies++;
+            else if (match.winner === game.player2 || match.winner === 'CPU') player2Wins++;
+        });
+        
+        // Actualizar scores en el juego
+        game.scores.player1 = player1Wins;
+        game.scores.player2 = player2Wins;
+        game.scores.ties = totalTies;
+        
+        updateScoreboard();
+    }
+    
+    // �🔄 Cargar partida incompleta si existe
+    function loadIncompleteGame() {
+        const key = `game_in_progress_${game.player1}`;
+        const savedData = localStorage.getItem(key);
+        
+        if (!savedData) return false;
+        
+        try {
+            const savedState = JSON.parse(savedData);
+            
+            // Verificar que el oponente coincida
+            if (savedState.player2 !== game.player2) {
+                // Oponente diferente, limpiar y empezar nuevo juego
+                clearSavedGame();
+                return false;
+            }
+            
+            // Restaurar estado del juego
+            game.board = [...savedState.board];
+            game.currentPlayer = savedState.currentPlayer;
+            game.player1Symbol = savedState.player1Symbol;
+            game.player2Symbol = savedState.player2Symbol;
+            gameData.gameId = savedState.id;
+            
+            updateBoard();
+            updatePlayerSymbols();
+            
+            return true;
+        } catch (e) {
+            console.error('Error al cargar partida guardada:', e);
+            clearSavedGame();
+            return false;
+        }
+    }
+    
+    // 🔄 Restaurar estado guardado si viene de resumeGame
+    if (gameData.savedState) {
+        game.board = [...gameData.savedState.board];
+        game.currentPlayer = gameData.savedState.currentPlayer;
+        game.scores = { ...gameData.savedState.scores };
+        game.player1Symbol = gameData.savedState.player1Symbol;
+        game.player2Symbol = gameData.savedState.player2Symbol;
+        updateBoard();
+        updateScoreboard();
+        updatePlayerSymbols();
+        
+        // Si es modo CPU y es turno de la IA, que juegue
+        if (game.mode === 'cpu' && !game.isPlayerTurn() && !game.gameOver) {
+            setTimeout(() => {
+                const aiMove = game.getAIMove();
+                if (aiMove !== -1) {
+                    game.makeMove(aiMove);
+                    updateBoard();
+                    updateScoreboard();
+                    saveGameState();
+                }
+            }, 500);
+        }
+    } else {
+        // NO cargar automáticamente partida incompleta
+        // Solo cargar estadísticas del historial
+        updateStats();
+    }
 
     updatePlayerSymbols();
     checkAIFirstMove();
 
     return screen;
 }
+
+// 🌐 Función global para reanudar partidas desde el historial
+window.resumeGame = function(playerName) {
+    const savedGameState = historyManager.getInProgressGame(playerName);
+    
+    if (!savedGameState) {
+        alert('No hay partida guardada para reanudar');
+        return;
+    }
+    
+    const gameData = {
+        player1: savedGameState.player1,
+        player2: savedGameState.player2,
+        mode: savedGameState.mode,
+        savedState: savedGameState,
+        gameId: savedGameState.id
+    };
+    
+    screenManager.transition(createGameScreen(gameData));
+};
+
+// 🔍 Función para obtener partida en progreso (para el historial)
+window.getInProgressGame = function(playerName) {
+    return historyManager.getInProgressGame(playerName);
+};
 
 function createAudioControls() {
     if (typeof AudioManager === 'undefined') {

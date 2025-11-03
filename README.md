@@ -110,6 +110,39 @@ El juego guarda automáticamente:
 - ✅ Puntuaciones entre sesiones
 - ✅ Historial de partidas por jugador
 - ✅ Preferencias de audio (música/efectos)
+- ✅ **Estado de partidas en progreso**
+  - Cada movimiento actualiza el estado guardado
+  - Tablero completo con todas las jugadas
+  - Turno del jugador actual
+  - Puntuación acumulada
+  - Símbolos asignados (X/O)
+  
+### 🎮 Cómo Funciona el Sistema de Guardado
+
+**Guardado Automático:**
+- Cada vez que haces un movimiento, el estado se guarda automáticamente
+- Si cierras el navegador, tu partida queda guardada
+- **NO se carga automáticamente** al volver a entrar
+
+**Reanudar Partida:**
+1. Abre el **Historial** desde el botón en el panel de acciones
+2. Si tienes una partida sin terminar, aparecerá en la sección **"PARTIDA EN CURSO"**
+3. Verás el número de movimientos realizados y la fecha
+4. Haz clic en el botón **"REANUDAR"** (color dorado 🧡)
+5. La partida se cargará exactamente donde la dejaste
+6. ¡La IA continuará jugando correctamente desde ese punto!
+
+**Características:**
+- ✅ Solo se puede tener una partida en progreso a la vez por jugador
+- ✅ Al completar una partida, el guardado automático se elimina
+- ✅ La IA retoma correctamente su contexto (símbolos, turno, tablero)
+- ✅ Compatible con modo CPU y Jugador vs Jugador
+- ✅ Las estadísticas se mantienen actualizadas
+
+**Preferencias de Audio:**
+- 🎵 Al entrar por primera vez, se pregunta si deseas música y sonidos
+- La preferencia se guarda y **NO se vuelve a preguntar**
+- Puedes cambiarla en cualquier momento desde los controles del juego
 
 ## Diseño
 
@@ -151,7 +184,7 @@ El juego ha sido probado en:
 
 Desarrollado por Francisco Daniel Castro Borrome como prueba técnica para demostrar habilidades en desarrollo web frontend con JavaScript vanilla.
 
-## Licencia
+## 📄 Licencia
 
 Este proyecto fue desarrollado como prueba técnica. Todos los derechos reservados.
 

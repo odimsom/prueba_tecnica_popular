@@ -315,83 +315,137 @@ class ModalManager {
         this.currentModal = modal;
     }
 
-showHistoryModal(currentPlayer, callback) {
-    const modal = document.createElement('div');
-    modal.className = 'modal-overlay';
-    
-    const playerHistory = historyManager.getPlayerHistory(currentPlayer);
-    
-    const historyItems = playerHistory.length > 0 
-        ? playerHistory.map((match, index) => {
-            const isPlayer1 = match.player1 === currentPlayer;
-            const opponent = isPlayer1 ? match.player2 : match.player1;
-            let resultText = '';
-            let resultIcon = '';
-            
-            if (match.winner === 'tie') {
-                resultText = 'EMPATE';
-                resultIcon = '⚖️';
-            } else if ((isPlayer1 && match.winner === match.player1) || (!isPlayer1 && match.winner === match.player2)) {
-                resultText = 'VICTORIA';
-                resultIcon = '🏆';
-            } else {
-                resultText = 'DERROTA';
-                resultIcon = '😔';
-            }
-            
-            const date = new Date(match.date);
+    showHistoryModal(currentPlayer, callback) {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay';
+        
+        const playerHistory = historyManager.getPlayerHistory(currentPlayer);
+        const inProgressGame = historyManager.getInProgressGame(currentPlayer);
+        
+        let inProgressHTML = '';
+        if (inProgressGame) {
+            const date = new Date(inProgressGame.updatedAt);
             const formattedDate = date.toLocaleDateString('es-ES', { 
                 day: '2-digit', 
                 month: '2-digit', 
-                year: 'numeric'
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
             });
             
-            return `
-                <div class="history-game-item" style="animation-delay: ${index * 0.05}s">
-                    <span class="history-game-icon">${resultIcon}</span>
-                    <div class="history-game-info">
-                        <span class="history-game-vs">${currentPlayer} vs ${opponent}</span>
-                        <span class="history-game-result">${resultText}</span>
+            const movesCount = inProgressGame.board.filter(cell => cell !== null).length;
+            
+            inProgressHTML = `
+                <div class="history-in-progress-section">
+                    <h3 class="history-section-title">⏸️ PARTIDA EN CURSO</h3>
+                    <div class="history-game-item in-progress-game" data-game-id="${inProgressGame.id}">
+                        <span class="history-game-icon">🎮</span>
+                        <div class="history-game-info">
+                            <span class="history-game-vs">${inProgressGame.player1} vs ${inProgressGame.player2}</span>
+                            <span class="history-game-result">${movesCount} movimientos • En progreso</span>
+                            <span class="history-game-date">${formattedDate}</span>
+                        </div>
+                        <button class="resume-game-btn" data-player="${currentPlayer}">
+                            REANUDAR
+                        </button>
                     </div>
-                    <span class="history-game-date">${formattedDate}</span>
                 </div>
             `;
-        }).join('')
-        : '<div class="history-empty-state"><span class="history-empty-icon">📊</span><p>No hay partidas registradas</p></div>';
-    
-    modal.innerHTML = `
-        <div class="modal-content modal-history">
-            <div class="modal-background" style="background-image: url('./assets/backgrounds/modals/square_modal_bg_large.png');"></div>
-            <h2 class="modal-title">HISTORIAL</h2>
-            <p class="modal-subtitle">${currentPlayer}</p>
-            <div class="modal-history-container">
-                ${historyItems}
+        }
+        
+        const historyItems = playerHistory.length > 0 
+            ? playerHistory.map((match, index) => {
+                const isPlayer1 = match.player1 === currentPlayer;
+                const opponent = isPlayer1 ? match.player2 : match.player1;
+                let resultText = '';
+                let resultIcon = '';
+                
+                if (match.winner === 'tie') {
+                    resultText = 'EMPATE';
+                    resultIcon = '⚖️';
+                } else if ((isPlayer1 && match.winner === match.player1) || (!isPlayer1 && match.winner === match.player2)) {
+                    resultText = 'VICTORIA';
+                    resultIcon = '🏆';
+                } else {
+                    resultText = 'DERROTA';
+                    resultIcon = '😔';
+                }
+                
+                const date = new Date(match.date);
+                const formattedDate = date.toLocaleDateString('es-ES', { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric'
+                });
+                
+                return `
+                    <div class="history-game-item" style="animation-delay: ${index * 0.05}s">
+                        <span class="history-game-icon">${resultIcon}</span>
+                        <div class="history-game-info">
+                            <span class="history-game-vs">${currentPlayer} vs ${opponent}</span>
+                            <span class="history-game-result">${resultText}</span>
+                        </div>
+                        <span class="history-game-date">${formattedDate}</span>
+                    </div>
+                `;
+            }).join('')
+            : '<div class="history-empty-state"><span class="history-empty-icon">📊</span><p>No hay partidas registradas</p></div>';
+        
+        const completedHistoryHTML = playerHistory.length > 0 ? `
+            <h3 class="history-section-title">📋 HISTORIAL COMPLETO</h3>
+            ${historyItems}
+        ` : historyItems;
+        
+        modal.innerHTML = `
+            <div class="modal-content modal-history">
+                <div class="modal-background" style="background-image: url('./assets/backgrounds/modals/square_modal_bg_large.png');"></div>
+                <h2 class="modal-title">HISTORIAL</h2>
+                <p class="modal-subtitle">${currentPlayer}</p>
+                <div class="modal-history-container">
+                    ${inProgressHTML}
+                    ${completedHistoryHTML}
+                </div>
+                <div class="modal-buttons">
+                    <button class="modal-btn modal-btn-exit modal-btn-equal">CERRAR</button>
+                </div>
             </div>
-            <div class="modal-buttons">
-                <button class="modal-btn modal-btn-exit modal-btn-equal">CERRAR</button>
-            </div>
-        </div>
-    `;
-    
-    document.body.appendChild(modal);
-    
-    const closeBtn = modal.querySelector('.modal-btn-exit');
-    closeBtn.addEventListener('click', () => {
-        modal.remove();
-        callback();
-    });
-    
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
+        `;
+        
+        document.body.appendChild(modal);
+        
+        const closeBtn = modal.querySelector('.modal-btn-exit');
+        closeBtn.addEventListener('click', () => {
             modal.remove();
             callback();
+        });
+        
+        const resumeBtn = modal.querySelector('.resume-game-btn');
+        if (resumeBtn) {
+            resumeBtn.addEventListener('click', () => {
+                const playerName = resumeBtn.getAttribute('data-player');
+                modal.remove();
+                if (typeof window.resumeGame === 'function') {
+                    window.resumeGame(playerName);
+                }
+            });
         }
-    });
-    
-    if (typeof AnimationManager !== 'undefined') {
-        AnimationManager.addRippleEffect(closeBtn);
+        
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.remove();
+                callback();
+            }
+        });
+        
+        if (typeof AnimationManager !== 'undefined') {
+            AnimationManager.addRippleEffect(closeBtn);
+            if (resumeBtn) {
+                AnimationManager.addRippleEffect(resumeBtn);
+            }
+        }
     }
-}    closeModal() {
+
+    closeModal() {
         if (this.currentModal) {
             this.currentModal.remove();
             this.currentModal = null;

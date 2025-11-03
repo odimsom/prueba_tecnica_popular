@@ -53,7 +53,8 @@ const historyManager = {
         const match = {
             ...matchData,
             date: new Date().toISOString(),
-            id: Date.now()
+            id: Date.now(),
+            completed: true
         };
         
         player1History.push(match);
@@ -89,5 +90,36 @@ const historyManager = {
             }
         }
         return allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+    },
+    
+    // 💾 Guardar partida en progreso
+    saveInProgressGame(playerName, gameState) {
+        const key = `game_in_progress_${playerName}`;
+        const gameData = {
+            ...gameState,
+            updatedAt: new Date().toISOString(),
+            id: gameState.id || Date.now(),
+            status: 'incomplete'
+        };
+        localStorage.setItem(key, JSON.stringify(gameData));
+    },
+    
+    // 📂 Obtener partida en progreso
+    getInProgressGame(playerName) {
+        const key = `game_in_progress_${playerName}`;
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    },
+    
+    // 🗑️ Limpiar partida en progreso
+    clearInProgressGame(playerName) {
+        const key = `game_in_progress_${playerName}`;
+        localStorage.removeItem(key);
+    },
+    
+    // ✅ Verificar si tiene partida incompleta
+    hasInProgressGame(playerName) {
+        return this.getInProgressGame(playerName) !== null;
     }
 };
+

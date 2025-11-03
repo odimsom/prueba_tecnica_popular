@@ -1,101 +1,124 @@
 const AudioManager = {
-    bgMusic: null,
+    backgroundMusic: null,
     sounds: {},
     musicEnabled: true,
-    sfxEnabled: true,
-    audioAvailable: false,
-
+    soundEnabled: true,
+    
     init() {
-        try {
-            this.bgMusic = new Audio();
-            this.bgMusic.src = './assets/song/background.mp3';
-            this.bgMusic.loop = true;
-            this.bgMusic.volume = 0.3;
-            
-            this.bgMusic.addEventListener('error', (e) => {
-                this.audioAvailable = false;
-            });
-            
-            this.bgMusic.addEventListener('canplay', () => {
-                this.audioAvailable = true;
-            });
-            
-            this.sounds = {
-                place: this.createSound('./assets/song/place.wav'),
-                win: this.createSound('./assets/song/win.wav'),
-                draw: this.createSound('./assets/song/draw.wav'),
-                click: this.createSound('./assets/song/click.wav'),
-                start: this.createSound('./assets/song/start.mp3')
-            };
-
-            Object.values(this.sounds).forEach(sound => {
-                if (sound) {
-                    sound.volume = 0.5;
-                    sound.addEventListener('error', () => {
-                        this.audioAvailable = false;
-                    });
-                }
-            });
-        } catch (error) {
-            this.audioAvailable = false;
-        }
-
-        const savedMusicPref = localStorage.getItem('musicEnabled');
-        const savedSfxPref = localStorage.getItem('sfxEnabled');
+        // Verificar si ya se preguntó por las preferencias de audio
+        const preferencesSet = localStorage.getItem('soundPreferencesSet');
         
-        if (savedMusicPref !== null) {
-            this.musicEnabled = savedMusicPref === 'true';
-        }
-        if (savedSfxPref !== null) {
-            this.sfxEnabled = savedSfxPref === 'true';
+        if (preferencesSet === 'true') {
+            // Cargar preferencias guardadas
+            const savedMusicPref = localStorage.getItem('musicEnabled');
+            const savedSoundPref = localStorage.getItem('soundEnabled');
+            
+            this.musicEnabled = savedMusicPref !== 'false';
+            this.soundEnabled = savedSoundPref !== 'false';
+            
+            this.loadAudio();
+        } else {
+            // Primera vez: mostrar modal de permiso
+            this.showPermissionModal();
         }
     },
-
-    createSound(src) {
-        const audio = new Audio();
-        audio.src = src;
-        audio.volume = 0.5;
+    
+    showPermissionModal() {
+        const modal = document.createElement('div');
+        modal.className = 'audio-permission-modal';
         
-        audio.addEventListener('error', (e) => {});
+        modal.innerHTML = `
+            <div class="audio-permission-content">
+                <div class="audio-permission-icon">🎵</div>
+                <h2>¡BIENVENIDO!</h2>
+                <p>¿Deseas jugar con música y efectos de sonido?</p>
+                <p style="font-size: 14px; opacity: 0.8; margin-top: 5px;">Puedes cambiar esto después en el panel de controles</p>
+                <div class="audio-permission-buttons">
+                    <button class="audio-permission-btn accept">SÍ, CON AUDIO</button>
+                    <button class="audio-permission-btn decline">NO, SILENCIO</button>
+                </div>
+            </div>
+        `;
         
-        return audio;
+        document.body.appendChild(modal);
+        
+        const acceptBtn = modal.querySelector('.accept');
+        const declineBtn = modal.querySelector('.decline');
+        
+        acceptBtn.addEventListener('click', () => {
+            this.musicEnabled = true;
+            this.soundEnabled = true;
+            localStorage.setItem('musicEnabled', 'true');
+            localStorage.setItem('soundEnabled', 'true');
+            localStorage.setItem('soundPreferencesSet', 'true');
+            modal.remove();
+            this.loadAudio();
+        });
+        
+        declineBtn.addEventListener('click', () => {
+            this.musicEnabled = false;
+            this.soundEnabled = false;
+            localStorage.setItem('musicEnabled', 'false');
+            localStorage.setItem('soundEnabled', 'false');
+            localStorage.setItem('soundPreferencesSet', 'true');
+            modal.remove();
+        });
     },
-
+    
+    loadAudio() {
+        this.backgroundMusic = new Audio('/assets/song/background.mp3');
+        this.backgroundMusic.loop = true;
+        this.backgroundMusic.volume = 0.3;
+        
+        this.sounds = {
+            place: new Audio('/assets/song/place.wav'),
+            win: new Audio('/assets/song/win.wav'),
+            draw: new Audio('/assets/song/draw.wav'),
+            click: new Audio('/assets/song/click.wav'),
+            start: new Audio('/assets/song/start.mp3')
+        };
+        
+        Object.values(this.sounds).forEach(sound => {
+            sound.volume = 0.5;
+        });
+        
+        if (this.musicEnabled) {
+            this.playMusic();
+        }
+    },
+    
     playMusic() {
-        if (this.musicEnabled && this.bgMusic) {
-            this.bgMusic.volume = 0.3;
-            const playPromise = this.bgMusic.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    this.audioAvailable = false;
-                });
-            }
-        }
+        if (!this.musicEnabled || !this.backgroundMusic) return;
+        
+        this.backgroundMusic.play().catch(err => {
+            console.log('No se pudo reproducir la música:', err);
+        });
     },
-
+    
     stopMusic() {
-        if (this.bgMusic) {
-            this.bgMusic.pause();
-            this.bgMusic.currentTime = 0;
+        if (this.backgroundMusic) {
+            this.backgroundMusic.pause();
+            this.backgroundMusic.currentTime = 0;
         }
     },
-
+    
     playSound(soundName) {
-        if (this.sfxEnabled && this.sounds[soundName] && this.audioAvailable !== false) {
-            const sound = this.sounds[soundName];
+        if (!this.soundEnabled) return;
+        
+        const sound = this.sounds[soundName];
+        if (sound) {
             sound.currentTime = 0;
-            const playPromise = sound.play();
-            if (playPromise !== undefined) {
-                playPromise.catch(() => {
-                    this.audioAvailable = false;
-                });
-            }
+            sound.play().catch(() => {});
         }
     },
-
+    
+    playSFX(soundName) {
+        return this.playSound(soundName);
+    },
+    
     toggleMusic() {
         this.musicEnabled = !this.musicEnabled;
-        localStorage.setItem('musicEnabled', this.musicEnabled);
+        localStorage.setItem('musicEnabled', this.musicEnabled.toString());
         
         if (this.musicEnabled) {
             this.playMusic();
@@ -105,18 +128,18 @@ const AudioManager = {
         
         return this.musicEnabled;
     },
-
+    
     toggleSFX() {
-        this.sfxEnabled = !this.sfxEnabled;
-        localStorage.setItem('sfxEnabled', this.sfxEnabled);
-        return this.sfxEnabled;
+        this.soundEnabled = !this.soundEnabled;
+        localStorage.setItem('soundEnabled', this.soundEnabled.toString());
+        return this.soundEnabled;
     },
-
+    
     isMusicEnabled() {
         return this.musicEnabled;
     },
-
+    
     isSFXEnabled() {
-        return this.sfxEnabled;
+        return this.soundEnabled;
     }
 };
